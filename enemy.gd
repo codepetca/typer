@@ -1,5 +1,5 @@
 class_name Enemy
-extends Sprite2D
+extends CharacterBody2D
 
 
 @onready var prompt : RichTextLabel = $RichTextLabel
@@ -8,12 +8,19 @@ extends Sprite2D
 @export var blue : Color = Color.ROYAL_BLUE
 @export var green : Color = Color.LAWN_GREEN
 @export var gray : Color = Color.GRAY
-@export var speed : float = 1.0
+@export var max_speed : float = 5.0
+@export var min_speed : float = 1.0
+@export var speed : float = min_speed
 
 
 func _ready() -> void:
+	Signals.difficulty_increased.connect(on_difficulty_increased)
 	prompt_text = PromptList.get_prompt()
 	prompt.parse_bbcode(set_center_tags(prompt_text))
+
+
+func set_difficulty(difficulty: float):
+	on_difficulty_increased(difficulty)
 
 
 func _physics_process(delta: float) -> void:
@@ -33,9 +40,9 @@ func set_next_character(next_character_index: int):
 	prompt.parse_bbcode(set_center_tags(blue_text + green_text + gray_text))
 
 
-func handle_difficulty_increased(new_difficulty: int):
-	var new_speed = speed + 0.5
-	speed = clamp(new_speed, speed, 5)
+func on_difficulty_increased(new_difficulty: int):
+	var new_speed = speed + (0.5 * new_difficulty)
+	speed = clamp(new_speed, 0.5, 5)
 
 
 ############

@@ -1,7 +1,23 @@
-[gd_scene load_steps=3 format=3 uid="uid://bqdmr686xdvfh"]
+[gd_scene load_steps=8 format=3 uid="uid://bqdmr686xdvfh"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_5hw0b"]
 [ext_resource type="Texture2D" uid="uid://dqnqbuf75f1m1" path="res://assets/black.png" id="2_73cxt"]
+[ext_resource type="FontFile" uid="uid://tawsev0oslv5" path="res://assets/xolonium-fonts-4.1/ttf/Xolonium-Regular.ttf" id="3_68nl5"]
+
+[sub_resource type="Theme" id="Theme_2u0di"]
+default_font = ExtResource("3_68nl5")
+default_font_size = 30
+
+[sub_resource type="Theme" id="Theme_dv8is"]
+default_font = ExtResource("3_68nl5")
+default_font_size = 70
+
+[sub_resource type="Theme" id="Theme_bp1qy"]
+default_font = ExtResource("3_68nl5")
+default_font_size = 60
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xkij1"]
+size = Vector2(1640.5, 175)
 
 [node name="Main" type="Node"]
 script = ExtResource("1_5hw0b")
@@ -40,13 +56,94 @@ position = Vector2(1206, -78)
 [node name="Marker2D6" type="Marker2D" parent="SpawnContainer"]
 position = Vector2(1488, -79)
 
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TopRow" type="HBoxContainer" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/VBoxContainer/TopRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="EnemiesKilledLabel" type="Label" parent="CanvasLayer/VBoxContainer/TopRow/HBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_2u0di")
+text = "Enemy Count: "
+
+[node name="EnemiesKilledValue" type="Label" parent="CanvasLayer/VBoxContainer/TopRow/HBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_2u0di")
+text = "0"
+
+[node name="MiddleRow" type="HBoxContainer" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="BottomRow" type="HBoxContainer" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/VBoxContainer/BottomRow"]
+layout_mode = 2
+
+[node name="DifficultyLabel" type="Label" parent="CanvasLayer/VBoxContainer/BottomRow/HBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_2u0di")
+text = "Difficulty: "
+
+[node name="DifficultyValue" type="Label" parent="CanvasLayer/VBoxContainer/BottomRow/HBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_2u0di")
+text = "1"
+
+[node name="GameOverScreen" type="PanelContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer/GameOverScreen"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/GameOverScreen/CenterContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/GameOverScreen/CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_dv8is")
+text = "Game Over"
+
+[node name="RestartButton" type="Button" parent="CanvasLayer/GameOverScreen/CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_bp1qy")
+text = "Restart"
+
 [node name="SpawnTimer" type="Timer" parent="."]
-wait_time = 3.0
+wait_time = 4.0
 autostart = true
 
 [node name="DifficultyTimer" type="Timer" parent="."]
 wait_time = 4.0
 autostart = true
 
+[node name="LoseArea" type="Area2D" parent="."]
+position = Vector2(-1, 995)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LoseArea"]
+position = Vector2(788, 94)
+shape = SubResource("RectangleShape2D_xkij1")
+
+[connection signal="pressed" from="CanvasLayer/GameOverScreen/CenterContainer/VBoxContainer/RestartButton" to="." method="_on_restart_button_pressed"]
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
 [connection signal="timeout" from="DifficultyTimer" to="." method="_on_difficulty_timer_timeout"]
+[connection signal="area_entered" from="LoseArea" to="." method="_on_area_2d_area_entered"]
+[connection signal="body_entered" from="LoseArea" to="." method="_on_lose_area_body_entered"]
