@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://bgly3f2l01rdd"]
+
+[ext_resource type="Texture2D" uid="uid://buphkprk6h3mb" path="res://assets/sheet.png" id="1_p746k"]
+[ext_resource type="Script" path="res://enemy.gd" id="2_hq2oy"]
+[ext_resource type="FontFile" uid="uid://tawsev0oslv5" path="res://assets/xolonium-fonts-4.1/ttf/Xolonium-Regular.ttf" id="3_fy7rt"]
+
+[sub_resource type="Theme" id="Theme_ihhap"]
+default_font = ExtResource("3_fy7rt")
+default_font_size = 18
+
+[node name="Enemy" type="Sprite2D"]
+position = Vector2(98, 84)
+texture = ExtResource("1_p746k")
+region_enabled = true
+region_rect = Rect2(425.105, 551.703, 91.8953, 86.2971)
+script = ExtResource("2_hq2oy")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+offset_left = -67.0
+offset_top = 49.0
+offset_right = 65.0
+offset_bottom = 79.0
+theme = SubResource("Theme_ihhap")
+bbcode_enabled = true
+text = "[center]Type this![/center]"
+scroll_active = false
