@@ -33,6 +33,16 @@ func set_next_character(next_character_index: int):
 	prompt.parse_bbcode(set_center_tags(blue_text + green_text + gray_text))
 
 
+func handle_difficulty_increased(new_difficulty: int):
+	var new_speed = speed + 0.5
+	speed = clamp(new_speed, speed, 5)
+
+
+############
+#  Helpers
+############
+
+
 func set_center_tags(string_to_center: String):
 	return "[center]" + string_to_center + "[/center]"
 

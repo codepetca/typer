@@ -5,8 +5,8 @@ extends Node
 @onready var spawn_container: Node2D = $SpawnContainer
 @onready var spawn_timer: Timer = $SpawnTimer
 
-var Enemy : PackedScene = preload("res://Enemy.tscn")
-
+@export var Enemy : PackedScene = preload("res://Enemy.tscn")
+@export var difficulty :int = 1
 
 var active_enemy : Enemy = null
 var current_character_index: int = -1
@@ -15,6 +15,7 @@ var key_typed : String = ""
 
 func _ready() -> void:
 	randomize()
+	spawn_enemy()
 
 
 func find_new_active_enemy(typed_character: String):
@@ -55,10 +56,23 @@ func _unhandled_input(event: InputEvent) -> void:
 					print("unsuccessfully typed %s" % key_typed)
 				
 
-
-
 func _on_spawn_timer_timeout() -> void:
+	spawn_enemy()
+
+
+func spawn_enemy():
 	var enemy_instance = Enemy.instantiate()
 	var spawn_point = spawn_container.get_children().pick_random()
 	enemy_container.add_child(enemy_instance)
 	enemy_instance.global_position = spawn_point.global_position
+
+
+func _on_difficulty_timer_timeout() -> void:
+	difficulty += 1
+	Signals.difficulty_increased.emit(difficulty)
+	print("difficulty increased to " + str(difficulty))
+	var new_wait_time = spawn_timer.wait_time - 0.2
+	spawn_timer.wait_time = clamp(new_wait_time, 0.5, 5)
+	print("new spawn time is " + str(spawn_timer.wait_time))
+	
+	
