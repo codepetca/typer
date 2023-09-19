@@ -8,7 +8,7 @@ extends CharacterBody2D
 @export var blue : Color = Color.ROYAL_BLUE
 @export var green : Color = Color.LAWN_GREEN
 @export var gray : Color = Color.GRAY
-@export var max_speed : float = 5.0
+@export var max_speed : float = 6.0
 @export var min_speed : float = 1.0
 @export var speed : float = min_speed
 
@@ -24,7 +24,9 @@ func set_difficulty(difficulty: float):
 
 
 func _physics_process(delta: float) -> void:
-	global_position.y += speed
+#	global_position.y += speed
+	velocity.y = 100
+	move_and_slide()
 
 
 func get_prompt() -> String:
@@ -42,7 +44,7 @@ func set_next_character(next_character_index: int):
 
 func on_difficulty_increased(new_difficulty: int):
 	var new_speed = speed + (0.5 * new_difficulty)
-	speed = clamp(new_speed, 0.5, 5)
+	speed = clamp(new_speed, min_speed, max_speed)
 
 
 ############

@@ -17,8 +17,10 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-PromptList="*res://prompt_list.gd"
-Signals="*res://Signals.gd"
+SilentWolf="*res://addons/silent_wolf/SilentWolf.gd"
+Global="*res://autoloads/Global.gd"
+Signals="*res://autoloads/Signals.gd"
+PromptList="*res://autoloads/prompt_list.gd"
 
 [display]
 

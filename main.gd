@@ -13,6 +13,8 @@ extends Node
 @export var EnemyScene : PackedScene = preload("res://Enemy.tscn")
 @export var max_difficulty : int = 20
 @export var min_difficulty : int = 1
+@export var max_spawn_delay : float = 5.0
+@export var min_spawn_delay : float = 0.3
 @export var difficulty : int = min_difficulty
 
 var active_enemy : Enemy = null
@@ -73,8 +75,8 @@ func spawn_enemy():
 	var enemy_instance : Enemy = EnemyScene.instantiate()
 	enemy_instance.set_difficulty(difficulty)
 	var spawn_point = spawn_container.get_children().pick_random()
-	enemy_container.add_child(enemy_instance)
 	enemy_instance.global_position = spawn_point.global_position
+	enemy_container.add_child(enemy_instance)
 	print(str(spawn_point.global_position))
 
 
@@ -105,7 +107,7 @@ func _on_difficulty_timer_timeout() -> void:
 	Signals.difficulty_increased.emit(difficulty)
 #	print("difficulty increased to " + str(difficulty))
 	var new_wait_time = spawn_timer.wait_time - 0.2
-	spawn_timer.wait_time = clamp(new_wait_time, 0.5, 5)
+	spawn_timer.wait_time = clamp(new_wait_time, min_spawn_delay, max_spawn_delay)
 #	print("new spawn time is " + str(spawn_timer.wait_time))
 
 
